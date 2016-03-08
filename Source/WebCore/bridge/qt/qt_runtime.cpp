@@ -1577,11 +1577,11 @@ void QtConnectionObject::execute(void** argv)
         args[i] = convertQVariantToValue(m_context, m_rootObject, QVariant(argType, argv[i+1]), ignoredException);
     }
 
-    JSValueRef exception = 0;
+    JSValueRef call_exception = 0;
     ExecState* exec = toJS(m_context);
-    JSObjectCallAsFunction(m_context, m_receiverFunction, m_receiver, argc, args.data(), &exception);
-    if (exception) {
-        throwError(exec, toJS(exec, exception));
+    JSObjectCallAsFunction(m_context, m_receiverFunction, m_receiver, argc, args.data(), &call_exception);
+    if (call_exception) {
+        WebCore::reportException(exec, toJS(exec, call_exception));
     }
 }
 
