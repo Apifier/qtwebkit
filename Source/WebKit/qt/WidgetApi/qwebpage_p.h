@@ -130,6 +130,7 @@ public:
     virtual QStringList menuActionsAsText() OVERRIDE;
     virtual void emitViewportChangeRequested() OVERRIDE;
     virtual bool acceptNavigationRequest(QWebFrameAdapter*, const QNetworkRequest&, int type) OVERRIDE;
+    virtual bool acceptNavigationRequest(QWebFrameAdapter*, const QNetworkRequest&, int type, const QString& postData) OVERRIDE;
     virtual void emitRestoreFrameStateRequested(QWebFrameAdapter*) OVERRIDE;
     virtual void emitSaveFrameStateRequested(QWebFrameAdapter*, QWebHistoryItem*) OVERRIDE;
     virtual void emitDownloadRequested(const QNetworkRequest&) OVERRIDE;

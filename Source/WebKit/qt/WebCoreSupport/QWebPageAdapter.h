@@ -215,6 +215,7 @@ public:
     virtual QStringList menuActionsAsText() = 0;
     virtual void emitViewportChangeRequested() = 0;
     virtual bool acceptNavigationRequest(QWebFrameAdapter*, const QNetworkRequest&, int type) = 0;
+	virtual bool acceptNavigationRequest(QWebFrameAdapter*, const QNetworkRequest&, int type, const QString& postData) = 0;
     virtual void emitRestoreFrameStateRequested(QWebFrameAdapter *) = 0;
     virtual void emitSaveFrameStateRequested(QWebFrameAdapter *, QWebHistoryItem*) = 0;
     virtual void emitDownloadRequested(const QNetworkRequest&) = 0;

@@ -388,6 +388,15 @@ bool QWebPagePrivate::acceptNavigationRequest(QWebFrameAdapter *frameAdapter, co
     return q->acceptNavigationRequest(frame, request, QWebPage::NavigationType(type));
 }
 
+bool QWebPagePrivate::acceptNavigationRequest(QWebFrameAdapter *frameAdapter, const QNetworkRequest &request, int type, const QString& postData)
+{
+    QWebFrame *frame = frameAdapter ? QWebFramePrivate::kit(frameAdapter): 0;
+    if (insideOpenCall
+        && frame == mainFrame.data())
+        return true;
+    return q->acceptNavigationRequest(frame, request, QWebPage::NavigationType(type), postData);
+}
+
 void QWebPagePrivate::emitRestoreFrameStateRequested(QWebFrameAdapter *frame)
 {
     emit q->restoreFrameStateRequested(QWebFramePrivate::kit(frame));
@@ -2231,6 +2240,11 @@ bool QWebPage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &
         }
     }
     return true;
+}
+
+bool QWebPage::acceptNavigationRequest(QWebFrame *frame, const QNetworkRequest &request, QWebPage::NavigationType type, const QString& postData)
+{
+    return this->acceptNavigationRequest(frame, request, type);
 }
 
 /*!

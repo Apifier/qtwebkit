@@ -1226,7 +1226,8 @@ void FrameLoaderClientQt::dispatchDecidePolicyForNewWindowAction(FramePolicyFunc
     Q_ASSERT(m_webFrame);
     QNetworkRequest r(request.toNetworkRequest(m_frame->loader()->networkingContext()));
 
-    if (!m_webFrame->pageAdapter->acceptNavigationRequest(0, r, (int)action.type())) {
+    QString postData = request.httpBody() ? QString(request.httpBody()->flattenToString()) : QString();
+    if (!m_webFrame->pageAdapter->acceptNavigationRequest(0, r, (int)action.type(), postData)) {
         if (action.type() == NavigationTypeFormSubmitted || action.type() == NavigationTypeFormResubmitted)
             m_frame->loader()->resetMultipleFormSubmissionProtection();
 
@@ -1246,6 +1247,7 @@ void FrameLoaderClientQt::dispatchDecidePolicyForNavigationAction(FramePolicyFun
     Q_ASSERT(m_webFrame);
     QNetworkRequest r(request.toNetworkRequest(m_frame->loader()->networkingContext()));
     PolicyAction result;
+    QString postData;
 
     // Currently, this is only enabled by DRT.
     if (policyDelegateEnabled) {
@@ -1268,12 +1270,14 @@ void FrameLoaderClientQt::dispatchDecidePolicyForNavigationAction(FramePolicyFun
         else
             result = PolicyIgnore;
 
-        m_webFrame->pageAdapter->acceptNavigationRequest(m_webFrame, r, (int)action.type());
+        postData = request.httpBody() ? QString(request.httpBody()->flattenToString()) : QString();
+        m_webFrame->pageAdapter->acceptNavigationRequest(m_webFrame, r, (int)action.type(), postData);
         callPolicyFunction(function, result);
         return;
     }
 
-    if (!m_webFrame->pageAdapter->acceptNavigationRequest(m_webFrame, r, (int)action.type())) {
+    postData = request.httpBody() ? QString(request.httpBody()->flattenToString()) : QString();
+    if (!m_webFrame->pageAdapter->acceptNavigationRequest(m_webFrame, r, (int)action.type(), postData)) {
         if (action.type() == NavigationTypeFormSubmitted || action.type() == NavigationTypeFormResubmitted)
             m_frame->loader()->resetMultipleFormSubmissionProtection();
 
